@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
@@ -12,7 +13,10 @@ async def root():
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
 
+
 @app.post("/hello")
-async def say_hello2(q: str):
-    print(f"q: {q}")
-    return {"message": f"Hello"}
+async def receive_data(request: Request):
+    # Получаем данные из запроса
+    data = await request.json()
+    print(data)  # Выводим данные в консоль для проверки
+    return JSONResponse(content={"status": "success", "data_received": data})
